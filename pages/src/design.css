@@ -153,8 +153,9 @@ a.card .go{display:inline-block;margin-top:12px;font-weight:700;color:var(--gold
 .attorney-grid{display:grid;gap:26px;grid-template-columns:1fr;align-items:center}
 @media (min-width:820px){.attorney-grid{grid-template-columns:auto 1fr;gap:40px}}
 .attorney-photo{width:180px;height:180px;border-radius:50%;background:#fff;
-  border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;
-  color:var(--muted);font-size:.72rem;text-align:center;margin:0 auto;overflow:hidden}
+  border:4px solid var(--gold);margin:0 auto;overflow:hidden;
+  box-shadow:0 8px 24px rgba(22,50,79,.15)}
+.attorney-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .attorney-copy h2{margin-bottom:4px}
 .attorney-copy .role{color:var(--gold-text);font-weight:700;font-size:.88rem;
   letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}

@@ -91,7 +91,7 @@ entry to `CITIES` in `pages/build.py` and run `python3 pages/build.py`.
 
 | Item | Where |
 |------|-------|
-| `[ATTORNEY PHOTO]` — Rachel's professional photo | `pages/src/attorney.html` |
+| ~~`[ATTORNEY PHOTO]`~~ **Done** — background-removed headshot embedded on every page (full-res transparent cutout at `pages/assets/rachel-knox.png` for reuse) | `pages/src/attorney.html` |
 | `[★ 5.0]` / review-count stat | `pages/src/stats.html` |
 | Real Google reviews, quoted verbatim | `pages/src/reviews.html` |
 | `[FIRM STREET ADDRESS…]` (FL Bar ad rules want an office location) | `pages/src/footer.html` |

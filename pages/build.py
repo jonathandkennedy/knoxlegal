@@ -23,6 +23,12 @@ LOGO_URI = "data:image/png;base64," + base64.b64encode(
     (HERE / "assets" / "knox-legal-logo-embed.png").read_bytes()
 ).decode()
 
+# Rachel's photo (background removed; full-res transparent cutout at
+# assets/rachel-knox.png, circle-cropped ~31 KB version embedded below).
+RACHEL_URI = "data:image/png;base64," + base64.b64encode(
+    (HERE / "assets" / "rachel-knox-embed.png").read_bytes()
+).decode()
+
 CALL_CTA = (
     '<a href="tel:{{PHONE_TEL}}" class="js-call">{{PHONE_DISPLAY}}</a>'
     "<small>{{CALL_NOTE}}</small>"
@@ -308,7 +314,8 @@ for page in PAGES:
     tokens = dict(DEFAULTS)
     tokens.update({k: v for k, v in page.items() if k not in ("out", "body")})
     tokens.update(
-        PHONE_DISPLAY=PHONE_DISPLAY, PHONE_TEL=PHONE_TEL, LOGO_URI=LOGO_URI, CSS=css
+        PHONE_DISPLAY=PHONE_DISPLAY, PHONE_TEL=PHONE_TEL,
+        LOGO_URI=LOGO_URI, RACHEL_URI=RACHEL_URI, CSS=css,
     )
 
     html = HEAD + header + read(page["body"]) + footer + script + TAIL
