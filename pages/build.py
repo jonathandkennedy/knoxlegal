@@ -3,8 +3,9 @@
 
 Run:  python3 pages/build.py
 Each entry in PAGES (plus each city in CITIES) becomes a self-contained
-HTML file at pages/<out>. Point each Google Ads ad group's final URL at
-the page that matches its intent.
+HTML file at the REPO ROOT (so any static host — Vercel included — serves
+the hub with zero routing config). Point each Google Ads ad group's final
+URL at the page that matches its intent.
 """
 
 import base64
@@ -335,6 +336,6 @@ for page in PAGES:
     if leftover:
         raise SystemExit(f"Unreplaced tokens in {page['out']}: {leftover}")
 
-    out = HERE / page["out"]
+    out = HERE.parent / page["out"]
     out.write_text(html, encoding="utf-8")
     print(f"wrote {out.name}  ({len(html)//1024} KB)")

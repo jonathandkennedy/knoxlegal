@@ -1,0 +1,5 @@
+# Deploy only the generated HTML pages — keep sources, internal strategy
+# docs, and full-res assets off the public site.
+README.md
+google-ads
+pages
