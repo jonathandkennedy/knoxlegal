@@ -20,22 +20,24 @@ never pollute probate ad conversions.
 ## What's in this repo
 
 ```
+— generated pages at the REPO ROOT (what Vercel serves) —
+index.html                       Hub home: "What's happening in your family?" router
+probate-administration.html      Core service page
+probate-litigation.html          Estate disputes (bigger clients)
+beneficiary-representation.html  Heirs left in the dark (bigger clients)
+out-of-state-probate.html        Remote + ancillary probate (bigger clients)
+trust-administration.html        Trustees & trust beneficiaries
+estate-planning.html             Warm soft-lander for wills/trusts visitors
+miami-beach-probate-lawyer.html  City PPC page
+pompano-beach-probate-lawyer.html City PPC page
+
 pages/
   build.py                     Assembles the hub from src/ (run: python3 pages/build.py)
   src/                         Design system, chrome, and page bodies
-  assets/knox-legal-logo.png       Firm logo, full resolution (white-text variant)
-  assets/knox-legal-logo-embed.png Optimized ~10 KB version embedded in every page
+  assets/                      Logo + Rachel's photo (full-res; optimized copies embedded)
 
-  — generated, ready to deploy —
-  index.html                       Hub home: "What's happening in your family?" router
-  probate-administration.html      Core service page
-  probate-litigation.html          Estate disputes (bigger clients)
-  beneficiary-representation.html  Heirs left in the dark (bigger clients)
-  out-of-state-probate.html        Remote + ancillary probate (bigger clients)
-  trust-administration.html        Trustees & trust beneficiaries
-  estate-planning.html             Warm soft-lander for wills/trusts visitors
-  miami-beach-probate-lawyer.html  City PPC page
-  pompano-beach-probate-lawyer.html City PPC page
+.vercelignore                  Deploys only the HTML — keeps sources & strategy docs private
+vercel.json                    cleanUrls (pages served without .html)
 
 google-ads/
   rsa-copy.md                  Paste-ready RSA copy per ad group (limits verified)
@@ -80,10 +82,12 @@ the PPC call line stays reserved for probate matters.
 
 The repo is connected to **Vercel** (project `knoxlegal`), which deploys
 every push — branch pushes get preview URLs, and `main` becomes production.
-`vercel.json` serves the hub from the site root with clean URLs:
-`/` is the hub home, `/miami-beach-probate-lawyer`,
-`/probate-litigation`, etc. (no `.html` needed — use these extensionless
-paths as the ads' final URLs).
+The generated pages live at the repo root, so no build step and no routing
+config are needed (Framework Preset: **Other**, all overrides off).
+`vercel.json` adds clean URLs: `/` is the hub home,
+`/miami-beach-probate-lawyer`, `/probate-litigation`, etc. — use these
+extensionless paths as the ads' final URLs. `.vercelignore` keeps
+`pages/` sources and `google-ads/` strategy docs off the public site.
 
 To ship on the firm's brand, add **results.knoxlegal.com** as a custom
 domain in Vercel → Project → Settings → Domains and point the subdomain's
