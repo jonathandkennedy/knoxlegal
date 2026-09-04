@@ -78,11 +78,17 @@ the PPC call line stays reserved for probate matters.
 
 ### Deploying
 
-Mirror the other builds: host the hub on a subdomain such as
-**results.knoxlegal.com** (CNAME the subdomain to the hosting, upload the
-generated HTML files + nothing else — every page is self-contained), or a
-folder like `knoxlegal.com/lp/`. All internal links are relative, so any
-host path works. `index.html` is the hub root.
+The repo is connected to **Vercel** (project `knoxlegal`), which deploys
+every push — branch pushes get preview URLs, and `main` becomes production.
+`vercel.json` serves the hub from the site root with clean URLs:
+`/` is the hub home, `/miami-beach-probate-lawyer`,
+`/probate-litigation`, etc. (no `.html` needed — use these extensionless
+paths as the ads' final URLs).
+
+To ship on the firm's brand, add **results.knoxlegal.com** as a custom
+domain in Vercel → Project → Settings → Domains and point the subdomain's
+CNAME at Vercel. Every page is self-contained, so the same files can also
+be uploaded to any static host if Vercel is ever dropped.
 
 To add a city page (Fort Lauderdale, Boca Raton, Key Biscayne…): add an
 entry to `CITIES` in `pages/build.py` and run `python3 pages/build.py`.
