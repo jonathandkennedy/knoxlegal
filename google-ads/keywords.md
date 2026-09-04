@@ -1,5 +1,21 @@
 # Keyword & campaign structure plan — probate campaigns
 
+## Ad group → landing page mapping (final URLs)
+
+Every ad group points at the hub page that matches its intent — never the
+generic homepage:
+
+| Traffic | Final URL (on the hub) |
+|---|---|
+| Search - Probate - Miami Beach | `miami-beach-probate-lawyer.html` |
+| Search - Probate - Pompano Beach | `pompano-beach-probate-lawyer.html` |
+| Estate dispute / will contest terms (growth, below) | `probate-litigation.html` |
+| Beneficiary / heir-rights terms (growth, below) | `beneficiary-representation.html` |
+| Out-of-state / ancillary terms (growth, below) | `out-of-state-probate.html` |
+| Trust administration terms | `trust-administration.html` |
+| Brand searches ("knox law probate") | `index.html` |
+
+
 ## Restructure (one-time, ~20 minutes)
 
 **Merge the duplicate ad groups.** Each campaign currently splits "Probate -
@@ -79,6 +95,63 @@ Skip broad match entirely until (a) the negative list has two clean weeks of
 search terms behind it and (b) conversion tracking counts only qualified
 leads. Broad + polluted conversions = paying Google to find more wills
 callers.
+
+## Growth campaigns — where the bigger clients are
+
+Turn these on once the core campaigns are clean (negatives in, conversions
+fixed). Both target the firm's highest-value matters and Rachel's actual
+strengths.
+
+### Search - Estate Disputes (geo: Florida, statewide)
+
+Contested estates carry the largest fees in this practice, and the searcher
+is highly motivated — deadlines are statutory. Final URLs:
+`probate-litigation.html` and `beneficiary-representation.html`.
+
+**Ad group: Will contests & litigation**
+```
+"will contest attorney"
+"contest a will in florida"
+"challenge a will florida"
+"undue influence will florida"
+"probate litigation attorney"
+"estate litigation lawyer"
+"inheritance dispute lawyer"
+"contest a trust florida"
+"trust litigation attorney"
+```
+
+**Ad group: Beneficiary rights**
+```
+"beneficiary rights florida"
+"beneficiary attorney"
+"executor not communicating with beneficiaries"
+"executor won't distribute inheritance"
+"how long can an executor take florida"
+"sue an executor florida"
+"remove an executor florida"
+"breach of fiduciary duty estate"
+```
+
+### Search - Out-of-State Families (geo: NY, NJ, CT, PA, OH, MI, IL — not FL)
+
+The quiet goldmine: heirs in feeder states settling Florida property.
+Every keyword contains "florida", the campaign's *location targeting* is
+the heirs' home states, and the final URL is `out-of-state-probate.html`.
+These searchers have real estate at stake and almost no local competition
+bidding for them.
+
+```
+"florida probate attorney"
+"probate lawyer in florida"
+"florida probate from out of state"
+"out of state executor florida"
+"ancillary probate florida"
+"settle an estate in florida"
+"parent died in florida"
+"florida probate for non residents"
+"inherited property in florida"
+```
 
 ## The weekly 10-minute ritual (this is where ROAS is actually won)
 

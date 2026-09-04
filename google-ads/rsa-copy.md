@@ -118,6 +118,56 @@ SLD| Ancillary probate handled
 ```
 → facts section
 
+## Growth campaign: Estate Disputes (→ probate-litigation.html / beneficiary-representation.html)
+
+Headlines (pin a "dispute" headline to position 1):
+
+```
+H| FL Estate Dispute Lawyer
+H| Contest a Will in Florida
+H| Will Contest? Deadlines Run
+H| Executor Not Cooperating?
+H| Protect Your Inheritance
+H| Undue Influence Claims
+H| Remove a Bad Executor
+H| We Trace Missing Assets
+H| Nearly 30 Yrs in Probate
+H| Confidential Case Review
+```
+
+Descriptions:
+
+```
+D| Will contests, undue influence & fiduciary misconduct. Deadlines can be 90 days — act now.
+D| An executor who won't communicate is a warning sign. Know your heir rights. Free review.
+D| Nearly 30 years fighting for fairness in Florida estates. Confidential case assessment.
+D| Suspicious will? Vanishing assets? We investigate, freeze, and recover. Talk to us first.
+```
+
+## Growth campaign: Out-of-State Families (→ out-of-state-probate.html)
+
+Headlines (pin "Florida Probate, From Afar" or "No Travel to Florida Needed" to position 2):
+
+```
+H| Florida Probate Lawyer
+H| Florida Probate, From Afar
+H| Settle a FL Estate Remotely
+H| No Travel to Florida Needed
+H| FL Ancillary Probate Help
+H| Sell the FL Property Remotely
+H| Out-of-State Heirs Welcome
+H| We Handle It From Here
+```
+
+Descriptions:
+
+```
+D| Mom's condo in Florida? We open, administer & close the estate — you never board a plane.
+D| Florida probate & ancillary administration handled remotely for out-of-state families.
+D| E-filing, remote hearings, signatures near you. Florida probate without the travel.
+D| Working with your home-state lawyer, we handle the Florida side. Free case review.
+```
+
 ## Display path
 
 Replace `{location(city)}` in the path with static, per-campaign paths that

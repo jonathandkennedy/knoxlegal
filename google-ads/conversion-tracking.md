@@ -16,10 +16,11 @@ optimizing toward them, and paying up to ~$106 a click to do it.
 
 **Primary conversions (bid toward these only):**
 
-1. **Qualified form submit** — the landing page fires `lp_form_submit` into
-   `dataLayer` only for probate situations. The planning option never
-   submits (those visitors see a polite redirect and fire
-   `lp_planning_deflected` instead), so this event is clean by construction.
+1. **Qualified form submit** — the hub fires `lp_form_submit` into
+   `dataLayer` only for probate situations. The planning option submits as
+   a separate `lp_planning_submit` event (the visitor is welcomed and
+   captured as a planning lead, not rejected), so the probate event is
+   clean by construction.
 2. **Qualified call** — a call the intake screen confirmed was probate
    (see `intake-call-script.md`). Two ways to get this into Google Ads,
    in order of preference:
@@ -47,14 +48,17 @@ The pages already push these events — just add the GTM container snippet
 |--------------------------|----------------------------|-------------------------------------------|
 | `lp_form_submit`         | `lp_form_submit`           | Google Ads conversion **(Primary)** + GA4 |
 | `lp_call_click`          | `lp_call_click`            | Google Ads conversion (Secondary) + GA4   |
-| `lp_planning_deflected`  | `lp_planning_deflected`    | GA4 only — measures wrong-intent volume   |
+| `lp_planning_submit`     | `lp_planning_submit`       | GA4 + (optional) Secondary Ads conversion — a real lead for the firm, **never Primary** |
+| `lp_planning_interest`   | `lp_planning_interest`     | GA4 only — someone picked "planning" in the dropdown |
 
-Each event carries `lp_city`, and form submits carry `lead_type`
-(open-probate / personal-rep / dispute / trust-admin), so reports can split
-lead quality by campaign and by situation.
+Each event carries `lp_page`, and probate submits carry `lead_type`
+(open-probate / personal-rep / dispute / beneficiary / trust-admin), so
+reports can split lead quality by campaign, page, and situation.
 
-`lp_planning_deflected` doubles as the scoreboard for this whole effort:
-watch it fall week over week as the negatives and new ad copy take hold.
+`lp_planning_interest` is the scoreboard for this whole effort: watch it
+fall week over week as the negatives and new ad copy take hold — while
+`lp_planning_submit` quietly hands the firm planning clients it would
+otherwise have scared off.
 
 ## What "working" looks like
 

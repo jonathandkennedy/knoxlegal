@@ -36,22 +36,24 @@ Close:
 
 Log the call as **PROBATE — QUALIFIED** in the call sheet.
 
-## Branch B — wills / trusts / estate planning (NOT this campaign)
+## Branch B — wills / trusts / estate planning (welcome them — separate lane)
 
-Stay warm — this person may be a probate client in the future, and their
-review of the firm matters. But do not book them into the probate pipeline:
+The firm does help families plan ahead (customized wills, trusts, and
+guardianship arrangements), so treat this caller as a real prospective
+client — just not a probate one. Warm, no rejection:
 
-> "Thank you — this particular line is reserved for families handling an
-> estate after a loss, so I can't book that here. For wills and trusts, the
-> best way to reach the firm is through knoxlegal.com [or the firm's
-> planning intake email/number]. They'll take great care of you."
+> "Wonderful — planning ahead is exactly what Rachel recommends. Let me
+> take your name and number and the firm will reach out about wills and
+> trusts. You can also read about it at knoxlegal.com."
 
-Log the call as **PLANNING — NOT QUALIFIED**. Never uploaded as an ads
-conversion.
+Capture: name, callback number, email, what they're interested in
+(will / trust / guardianship / not sure). Route to the firm's planning
+callback list — **not** the probate case-review pipeline.
 
-> Decision for the firm: if she *wants* planning work at normal (non-PPC)
-> acquisition cost, give Branch B a real handoff (transfer or callback list)
-> — just keep it out of the ads conversion upload either way.
+Log the call as **PLANNING — NOT AN ADS CONVERSION**. These calls are real
+leads for the firm, but they are never uploaded to Google Ads: uploading
+them would re-teach Smart Bidding to hunt for planning callers, which is
+the exact problem this whole system fixes.
 
 ## Branch C — everything else (records lookups, DIY form help, agents/investors, jobs)
 
