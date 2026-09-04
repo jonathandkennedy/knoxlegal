@@ -80,7 +80,15 @@ a{color:var(--navy)}
 .subnav a.on{color:var(--navy);border-bottom-color:var(--gold)}
 
 /* ---------- hero ---------- */
-.hero{background:var(--paper);padding:44px 0 38px}
+.hero{background:var(--paper);padding:38px 0 38px}
+.hero-grid{display:grid;gap:26px;grid-template-columns:1fr}
+@media (min-width:920px){
+  .hero-grid{grid-template-columns:1.05fr .9fr;column-gap:44px;
+    grid-template-areas:"copy side" "extra side";align-items:start}
+  .hero-copy{grid-area:copy}
+  .hero-side{grid-area:side}
+  .hero-extra{grid-area:extra}
+}
 .eyebrow{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-text);
   font-weight:700;margin-bottom:12px}
 .hero h1{font-size:clamp(1.95rem,5.4vw,3rem);margin-bottom:8px;max-width:760px}
@@ -197,12 +205,31 @@ a.card .go{display:inline-block;margin-top:12px;font-weight:700;color:var(--gold
 .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;
   font-size:.8rem;font-weight:600;color:var(--navy)}
 
-/* ---------- form ---------- */
+/* ---------- form (one-question-at-a-time wizard) ---------- */
 #case-review{scroll-margin-top:110px}
 .form-card{background:#fff;border:1px solid var(--line);border-radius:16px;
-  box-shadow:0 10px 34px rgba(22,50,79,.09);padding:28px 24px;max-width:600px;margin:0 auto}
-.form-card h2{font-size:1.5rem}
-.form-card .section-sub{margin-bottom:18px;font-size:.95rem}
+  box-shadow:0 10px 34px rgba(22,50,79,.12);padding:26px 22px;max-width:600px;margin:0 auto}
+.form-card h2{font-size:1.4rem}
+.wiz-sub{font-size:.9rem;color:var(--muted);margin:6px 0 14px}
+.progress{height:6px;border-radius:999px;background:var(--sand);overflow:hidden}
+.progress-fill{height:100%;width:33%;background:var(--gold);border-radius:999px;
+  transition:width .25s}
+.wiz-label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold-text);font-weight:700;margin:8px 0 14px}
+.wiz-step{border:0;margin:0;padding:0}
+.wiz-step legend{font-family:Georgia,serif;font-size:1.12rem;font-weight:700;
+  color:var(--navy);margin-bottom:14px;line-height:1.3}
+.opts{display:grid;gap:10px}
+.opt{display:block;width:100%;text-align:left;font-size:.98rem;font-weight:600;
+  color:var(--navy);background:#fff;border:2px solid var(--line);border-radius:12px;
+  padding:14px 42px 14px 16px;cursor:pointer;position:relative;font-family:inherit;
+  transition:border-color .12s,background .12s}
+.opt::after{content:"→";position:absolute;right:16px;top:50%;transform:translateY(-50%);
+  color:var(--gold-deep);font-weight:700}
+.opt:hover,.opt:focus-visible{border-color:var(--gold);background:var(--warm-bg)}
+.wiz-back{background:none;border:0;color:var(--muted);font-weight:600;font-size:.85rem;
+  cursor:pointer;margin-top:16px;padding:4px 0;font-family:inherit}
+.wiz-back:hover{color:var(--navy)}
 label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 5px}
 label .req{color:#b23b3b}
 input,select,textarea{width:100%;font-size:1rem;padding:12px;border:1px solid #c9c2b4;
@@ -527,21 +554,65 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }).then(function(r){ if (r.ok) done(); else fail(); }).catch(fail);
   }
 
-  /* ---------- main case-review form ---------- */
+  /* ---------- case-review wizard: one question at a time ---------- */
   var form = document.getElementById("lead-form");
   if (form){
-    var situation = document.getElementById("situation");
-    var planNote  = document.getElementById("planning-note");
-    var thanks    = document.getElementById("thanks-msg");
-    var detail    = document.getElementById("thanks-detail");
-    var errBox    = document.getElementById("form-error");
+    var answers  = {};
+    var steps    = form.querySelectorAll(".wiz-step");
+    var fill     = document.getElementById("wiz-fill");
+    var label    = document.getElementById("wiz-label");
+    var backBtn  = document.getElementById("wiz-back");
+    var planNote = document.getElementById("planning-note");
+    var legend3  = document.getElementById("contact-legend");
+    var submitBtn = document.getElementById("wiz-submit");
+    var defaultSubmit = submitBtn.textContent;
+    var thanks   = document.getElementById("thanks-msg");
+    var detail   = document.getElementById("thanks-detail");
+    var errBox   = document.getElementById("form-error");
+    var current  = 1, started = false;
 
     // Planning visitors are welcomed, not turned away — their lead is simply
-    // tagged separately so it never counts as a probate ad conversion.
-    situation.addEventListener("change", function(){
-      var planning = situation.value === "planning";
-      planNote.style.display = planning ? "block" : "none";
-      if (planning) track("lp_planning_interest");
+    // tagged separately so it never counts as a probate ad conversion. They
+    // skip the estate question (there's no estate) and go straight to contact.
+    function isPlanning(){ return answers.situation === "planning"; }
+    function total(){ return isPlanning() ? 2 : 3; }
+    function shown(step){ return (isPlanning() && step === 3) ? 2 : step; }
+
+    function show(step){
+      current = step;
+      for (var i = 0; i < steps.length; i++){
+        steps[i].hidden = (parseInt(steps[i].getAttribute("data-step"), 10) !== step);
+      }
+      backBtn.hidden = (step === 1);
+      label.textContent = "Question " + shown(step) + " of " + total();
+      fill.style.width = Math.round(100 * shown(step) / total()) + "%";
+      planNote.style.display = (step === 3 && isPlanning()) ? "block" : "none";
+      if (step === 3){
+        legend3.textContent = isPlanning()
+          ? "Where should the firm reach you about planning?"
+          : "Last step — where should we send your case review?";
+        submitBtn.textContent = isPlanning()
+          ? "Request a Planning Conversation" : defaultSubmit;
+      }
+    }
+
+    form.addEventListener("click", function(e){
+      var opt = e.target.closest(".opt");
+      if (!opt) return;
+      answers[opt.getAttribute("data-q")] = opt.getAttribute("data-v");
+      if (!started){ started = true; track("lp_form_start"); }
+      if (opt.getAttribute("data-q") === "situation"){
+        if (isPlanning()){ track("lp_planning_interest"); show(3); }
+        else show(2);
+      } else {
+        show(3);
+      }
+    });
+
+    backBtn.addEventListener("click", function(){
+      errBox.style.display = "none";
+      if (current === 3) show(isPlanning() ? 1 : 2);
+      else show(1);
     });
 
     form.addEventListener("submit", function(e){
@@ -551,36 +622,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       var name  = document.getElementById("name").value.trim();
       var phone = document.getElementById("phone").value.trim();
-      if (!situation.value || !name || !phone){
+      if (!answers.situation || !name || !phone){
         errBox.style.display = "block";
         return;
       }
 
-      var planning = situation.value === "planning";
+      var planning = isPlanning();
       var data = {
-        situation: situation.value,
+        situation: answers.situation,
+        real_estate: answers.real_estate || "",
         lead_type: planning ? "planning" : "probate",
         name: name,
         phone: phone,
         email: document.getElementById("email").value.trim(),
-        message: document.getElementById("message").value.trim(),
         lp_page: "estate-planning",
         lp_kw: window.__lp_kw || ""
       };
 
       send(data, function(){
         form.style.display = "none";
+        label.style.display = "none";
+        fill.style.width = "100%";
         detail.textContent = planning
           ? "The firm will reach out about wills, trusts, and planning ahead."
           : "The firm will review the estate details and reach out shortly.";
         thanks.style.display = "block";
-        track(planning ? "lp_planning_submit" : "lp_form_submit", {lead_type: data.situation});
-        thanks.scrollIntoView({behavior:"smooth", block:"center"});
+        track(planning ? "lp_planning_submit" : "lp_form_submit",
+              {lead_type: data.situation, real_estate: data.real_estate});
       }, function(){
         errBox.textContent = "Something went wrong sending your request. Please call us at (954) 738-4883.";
         errBox.style.display = "block";
       });
     });
+
+    show(1);
   }
 
   /* ---------- planning page mini form ---------- */
