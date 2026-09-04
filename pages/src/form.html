@@ -1,59 +1,68 @@
-<section id="case-review" class="alt">
-  <div class="wrap">
-    <div class="form-card">
-      <h2>{{FORM_TITLE}}</h2>
-      <div class="rule"><span></span></div>
-      <p class="section-sub">{{FORM_SUB}}</p>
+<div class="form-card" id="case-review">
+  <h2>{{FORM_TITLE}}</h2>
+  <p class="wiz-sub">{{FORM_SUB}}</p>
+  <div class="progress"><div class="progress-fill" id="wiz-fill"></div></div>
+  <p class="wiz-label" id="wiz-label">Question 1 of 3</p>
 
-      <form id="lead-form" method="post" action="#" novalidate>
-        <label for="situation">Which best describes your situation? <span class="req">*</span></label>
-        <select id="situation" name="situation" required>
-          <option value="" selected disabled>Select your situation…</option>
-          <option value="open-probate">A family member passed away — we need to open probate</option>
-          <option value="personal-rep">I'm the personal representative / executor and need help</option>
-          <option value="dispute">There's a dispute over the will, the estate, or a trustee</option>
-          <option value="beneficiary">I'm an heir or beneficiary with questions or concerns</option>
-          <option value="trust-admin">Trust administration after a death</option>
-          <option value="planning">I'd like a will or trust prepared (planning ahead)</option>
-        </select>
-
-        <div class="note" id="planning-note">
-          <strong>Happy to help with that too.</strong> Planning ahead is exactly what Rachel
-          recommends to every family she meets in probate court. Leave your details below and
-          the firm will reach out about wills, trusts, and guardianship arrangements — or learn
-          more on our <a href="estate-planning.html">Planning Ahead</a> page.
-        </div>
-
-        <label for="name">Your name <span class="req">*</span></label>
-        <input id="name" name="name" type="text" autocomplete="name" required>
-
-        <label for="phone">Phone <span class="req">*</span></label>
-        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
-
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" inputmode="email" autocomplete="email">
-
-        <label for="message">Anything you'd like us to know? (optional)</label>
-        <textarea id="message" name="message" placeholder="{{FORM_PLACEHOLDER}}"></textarea>
-
-        <div class="hp" aria-hidden="true">
-          <label for="company">Company</label>
-          <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
-        </div>
-
-        <input type="hidden" name="lp_page" value="{{SLUG}}">
-
-        <button class="btn btn-gold" type="submit">{{FORM_BUTTON}}</button>
-        <p class="form-error" id="form-error">Please select your situation and fill in your name and phone number.</p>
-        <p class="fineprint">Free and confidential. Your information is reviewed by the firm —
-          never sold or shared.</p>
-      </form>
-
-      <div class="thanks" id="thanks-msg">
-        <strong>Thank you — your request is in.</strong> <span id="thanks-detail">The firm will
-        reach out shortly.</span> If the matter is urgent, call
-        <a href="tel:{{PHONE_TEL}}" class="js-call">{{PHONE_DISPLAY}}</a>.
+  <form id="lead-form" method="post" action="#" novalidate>
+    <fieldset class="wiz-step" data-step="1">
+      <legend>Which best describes your situation?</legend>
+      <div class="opts">
+        <button type="button" class="opt" data-q="situation" data-v="open-probate">A family member passed away — we need to open probate</button>
+        <button type="button" class="opt" data-q="situation" data-v="personal-rep">I'm the personal representative / executor and need help</button>
+        <button type="button" class="opt" data-q="situation" data-v="dispute">There's a dispute over the will, the estate, or a trustee</button>
+        <button type="button" class="opt" data-q="situation" data-v="beneficiary">I'm an heir or beneficiary with questions or concerns</button>
+        <button type="button" class="opt" data-q="situation" data-v="trust-admin">Trust administration after a death</button>
+        <button type="button" class="opt" data-q="situation" data-v="planning">I'd like a will or trust prepared (planning ahead)</button>
       </div>
-    </div>
+    </fieldset>
+
+    <fieldset class="wiz-step" data-step="2" hidden>
+      <legend>Does the estate include a home, condo, or land in Florida?</legend>
+      <div class="opts">
+        <button type="button" class="opt" data-q="real_estate" data-v="yes">Yes — there's Florida real estate</button>
+        <button type="button" class="opt" data-q="real_estate" data-v="no">No real estate</button>
+        <button type="button" class="opt" data-q="real_estate" data-v="not-sure">I'm not sure yet</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="wiz-step" data-step="3" hidden>
+      <legend id="contact-legend">Last step — where should we send your case review?</legend>
+
+      <div class="note" id="planning-note">
+        <strong>Happy to help with that too.</strong> Planning ahead is exactly what Rachel
+        recommends to every family she meets in probate court — leave your details and the
+        firm will reach out about wills, trusts, and guardianship arrangements. Or learn more
+        on our <a href="estate-planning.html">Planning Ahead</a> page.
+      </div>
+
+      <label for="name">Your name <span class="req">*</span></label>
+      <input id="name" name="name" type="text" autocomplete="name" required>
+
+      <label for="phone">Phone <span class="req">*</span></label>
+      <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" inputmode="email" autocomplete="email">
+
+      <div class="hp" aria-hidden="true">
+        <label for="company">Company</label>
+        <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button class="btn btn-gold" type="submit" id="wiz-submit">{{FORM_BUTTON}}</button>
+      <p class="form-error" id="form-error">Please fill in your name and phone number.</p>
+    </fieldset>
+
+    <button type="button" class="wiz-back" id="wiz-back" hidden>&larr; Back</button>
+  </form>
+
+  <div class="thanks" id="thanks-msg">
+    <strong>Thank you — your request is in.</strong> <span id="thanks-detail">The firm will
+    reach out shortly.</span> If the matter is urgent, call
+    <a href="tel:{{PHONE_TEL}}" class="js-call">{{PHONE_DISPLAY}}</a>.
   </div>
-</section>
+
+  <p class="fineprint">Free and confidential. Your information is reviewed by the firm —
+    never sold or shared.</p>
+</div>

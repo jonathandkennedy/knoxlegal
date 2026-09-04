@@ -80,7 +80,15 @@ a{color:var(--navy)}
 .subnav a.on{color:var(--navy);border-bottom-color:var(--gold)}
 
 /* ---------- hero ---------- */
-.hero{background:var(--paper);padding:44px 0 38px}
+.hero{background:var(--paper);padding:38px 0 38px}
+.hero-grid{display:grid;gap:26px;grid-template-columns:1fr}
+@media (min-width:920px){
+  .hero-grid{grid-template-columns:1.05fr .9fr;column-gap:44px;
+    grid-template-areas:"copy side" "extra side";align-items:start}
+  .hero-copy{grid-area:copy}
+  .hero-side{grid-area:side}
+  .hero-extra{grid-area:extra}
+}
 .eyebrow{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-text);
   font-weight:700;margin-bottom:12px}
 .hero h1{font-size:clamp(1.95rem,5.4vw,3rem);margin-bottom:8px;max-width:760px}
@@ -197,12 +205,31 @@ a.card .go{display:inline-block;margin-top:12px;font-weight:700;color:var(--gold
 .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;
   font-size:.8rem;font-weight:600;color:var(--navy)}
 
-/* ---------- form ---------- */
+/* ---------- form (one-question-at-a-time wizard) ---------- */
 #case-review{scroll-margin-top:110px}
 .form-card{background:#fff;border:1px solid var(--line);border-radius:16px;
-  box-shadow:0 10px 34px rgba(22,50,79,.09);padding:28px 24px;max-width:600px;margin:0 auto}
-.form-card h2{font-size:1.5rem}
-.form-card .section-sub{margin-bottom:18px;font-size:.95rem}
+  box-shadow:0 10px 34px rgba(22,50,79,.12);padding:26px 22px;max-width:600px;margin:0 auto}
+.form-card h2{font-size:1.4rem}
+.wiz-sub{font-size:.9rem;color:var(--muted);margin:6px 0 14px}
+.progress{height:6px;border-radius:999px;background:var(--sand);overflow:hidden}
+.progress-fill{height:100%;width:33%;background:var(--gold);border-radius:999px;
+  transition:width .25s}
+.wiz-label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold-text);font-weight:700;margin:8px 0 14px}
+.wiz-step{border:0;margin:0;padding:0}
+.wiz-step legend{font-family:Georgia,serif;font-size:1.12rem;font-weight:700;
+  color:var(--navy);margin-bottom:14px;line-height:1.3}
+.opts{display:grid;gap:10px}
+.opt{display:block;width:100%;text-align:left;font-size:.98rem;font-weight:600;
+  color:var(--navy);background:#fff;border:2px solid var(--line);border-radius:12px;
+  padding:14px 42px 14px 16px;cursor:pointer;position:relative;font-family:inherit;
+  transition:border-color .12s,background .12s}
+.opt::after{content:"→";position:absolute;right:16px;top:50%;transform:translateY(-50%);
+  color:var(--gold-deep);font-weight:700}
+.opt:hover,.opt:focus-visible{border-color:var(--gold);background:var(--warm-bg)}
+.wiz-back{background:none;border:0;color:var(--muted);font-weight:600;font-size:.85rem;
+  cursor:pointer;margin-top:16px;padding:4px 0;font-family:inherit}
+.wiz-back:hover{color:var(--navy)}
 label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 5px}
 label .req{color:#b23b3b}
 input,select,textarea{width:100%;font-size:1rem;padding:12px;border:1px solid #c9c2b4;
@@ -288,27 +315,98 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </nav>
 <div class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Knox Law · Probate Administration</p>
-    <h1>Florida Probate Administration, Start to Finish</h1>
-    <div class="rule"><span></span></div>
-    <p class="lead">From the first petition to the final distribution — summary and formal
-      administration for Florida estates of every size, including the complex ones other
-      firms turn away.</p>
-    <ul class="checks">
-      <li>Personal representative appointed &amp; letters of administration issued</li>
-      <li>Creditor notices, claims, and negotiations handled</li>
-      <li>Real property, business interests &amp; multi-state assets administered</li>
-      <li>Clear fee quote before anything is filed</li>
-    </ul>
-    <div class="cta-row">
-      <div>
-        <a class="btn btn-gold" href="#case-review">Start a Free Probate Case Review</a>
-        <span class="cta-note">2-minute form · no cost · no obligation</span>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Knox Law · Probate Administration</p>
+      <h1>Florida Probate Administration, Start to Finish</h1>
+      <div class="rule"><span></span></div>
+      <p class="lead">From the first petition to the final distribution — summary and formal
+        administration for Florida estates of every size, including the complex ones other
+        firms turn away.</p>
+    </div>
+    <div class="hero-side">
+<div class="form-card" id="case-review">
+  <h2>Start Your Probate Case Review</h2>
+  <p class="wiz-sub">Tell us a little about the estate. We'll tell you which type of Florida administration applies, what it involves, and what it costs.</p>
+  <div class="progress"><div class="progress-fill" id="wiz-fill"></div></div>
+  <p class="wiz-label" id="wiz-label">Question 1 of 3</p>
+
+  <form id="lead-form" method="post" action="#" novalidate>
+    <fieldset class="wiz-step" data-step="1">
+      <legend>Which best describes your situation?</legend>
+      <div class="opts">
+        <button type="button" class="opt" data-q="situation" data-v="open-probate">A family member passed away — we need to open probate</button>
+        <button type="button" class="opt" data-q="situation" data-v="personal-rep">I'm the personal representative / executor and need help</button>
+        <button type="button" class="opt" data-q="situation" data-v="dispute">There's a dispute over the will, the estate, or a trustee</button>
+        <button type="button" class="opt" data-q="situation" data-v="beneficiary">I'm an heir or beneficiary with questions or concerns</button>
+        <button type="button" class="opt" data-q="situation" data-v="trust-admin">Trust administration after a death</button>
+        <button type="button" class="opt" data-q="situation" data-v="planning">I'd like a will or trust prepared (planning ahead)</button>
       </div>
-      <div>
-        <a class="btn btn-ghost js-call" href="tel:+19547384883">Call (954) 738-4883</a>
-        <span class="cta-note">For probate after a death</span>
+    </fieldset>
+
+    <fieldset class="wiz-step" data-step="2" hidden>
+      <legend>Does the estate include a home, condo, or land in Florida?</legend>
+      <div class="opts">
+        <button type="button" class="opt" data-q="real_estate" data-v="yes">Yes — there's Florida real estate</button>
+        <button type="button" class="opt" data-q="real_estate" data-v="no">No real estate</button>
+        <button type="button" class="opt" data-q="real_estate" data-v="not-sure">I'm not sure yet</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="wiz-step" data-step="3" hidden>
+      <legend id="contact-legend">Last step — where should we send your case review?</legend>
+
+      <div class="note" id="planning-note">
+        <strong>Happy to help with that too.</strong> Planning ahead is exactly what Rachel
+        recommends to every family she meets in probate court — leave your details and the
+        firm will reach out about wills, trusts, and guardianship arrangements. Or learn more
+        on our <a href="estate-planning.html">Planning Ahead</a> page.
+      </div>
+
+      <label for="name">Your name <span class="req">*</span></label>
+      <input id="name" name="name" type="text" autocomplete="name" required>
+
+      <label for="phone">Phone <span class="req">*</span></label>
+      <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" inputmode="email" autocomplete="email">
+
+      <div class="hp" aria-hidden="true">
+        <label for="company">Company</label>
+        <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button class="btn btn-gold" type="submit" id="wiz-submit">Request My Free Case Review</button>
+      <p class="form-error" id="form-error">Please fill in your name and phone number.</p>
+    </fieldset>
+
+    <button type="button" class="wiz-back" id="wiz-back" hidden>&larr; Back</button>
+  </form>
+
+  <div class="thanks" id="thanks-msg">
+    <strong>Thank you — your request is in.</strong> <span id="thanks-detail">The firm will
+    reach out shortly.</span> If the matter is urgent, call
+    <a href="tel:+19547384883" class="js-call">(954) 738-4883</a>.
+  </div>
+
+  <p class="fineprint">Free and confidential. Your information is reviewed by the firm —
+    never sold or shared.</p>
+</div>
+
+    </div>
+    <div class="hero-extra">
+      <ul class="checks">
+        <li>Personal representative appointed &amp; letters of administration issued</li>
+        <li>Creditor notices, claims, and negotiations handled</li>
+        <li>Real property, business interests &amp; multi-state assets administered</li>
+        <li>Clear fee quote before anything is filed</li>
+      </ul>
+      <div class="cta-row">
+        <div>
+          <a class="btn btn-ghost js-call" href="tel:+19547384883">Call (954) 738-4883</a>
+          <span class="cta-note">For probate after a death</span>
+        </div>
       </div>
     </div>
   </div>
@@ -323,65 +421,74 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
-<section id="case-review" class="alt">
-  <div class="wrap">
-    <div class="form-card">
-      <h2>Start Your Probate Case Review</h2>
-      <div class="rule"><span></span></div>
-      <p class="section-sub">Tell us a little about the estate. We'll tell you which type of Florida administration applies, what it involves, and what it costs.</p>
+<div class="form-card" id="case-review">
+  <h2>Start Your Probate Case Review</h2>
+  <p class="wiz-sub">Tell us a little about the estate. We'll tell you which type of Florida administration applies, what it involves, and what it costs.</p>
+  <div class="progress"><div class="progress-fill" id="wiz-fill"></div></div>
+  <p class="wiz-label" id="wiz-label">Question 1 of 3</p>
 
-      <form id="lead-form" method="post" action="#" novalidate>
-        <label for="situation">Which best describes your situation? <span class="req">*</span></label>
-        <select id="situation" name="situation" required>
-          <option value="" selected disabled>Select your situation…</option>
-          <option value="open-probate">A family member passed away — we need to open probate</option>
-          <option value="personal-rep">I'm the personal representative / executor and need help</option>
-          <option value="dispute">There's a dispute over the will, the estate, or a trustee</option>
-          <option value="beneficiary">I'm an heir or beneficiary with questions or concerns</option>
-          <option value="trust-admin">Trust administration after a death</option>
-          <option value="planning">I'd like a will or trust prepared (planning ahead)</option>
-        </select>
-
-        <div class="note" id="planning-note">
-          <strong>Happy to help with that too.</strong> Planning ahead is exactly what Rachel
-          recommends to every family she meets in probate court. Leave your details below and
-          the firm will reach out about wills, trusts, and guardianship arrangements — or learn
-          more on our <a href="estate-planning.html">Planning Ahead</a> page.
-        </div>
-
-        <label for="name">Your name <span class="req">*</span></label>
-        <input id="name" name="name" type="text" autocomplete="name" required>
-
-        <label for="phone">Phone <span class="req">*</span></label>
-        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
-
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" inputmode="email" autocomplete="email">
-
-        <label for="message">Anything you'd like us to know? (optional)</label>
-        <textarea id="message" name="message" placeholder="e.g., My father passed in March. He owned a condo in Miami and had accounts at two banks. There is a will."></textarea>
-
-        <div class="hp" aria-hidden="true">
-          <label for="company">Company</label>
-          <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
-        </div>
-
-        <input type="hidden" name="lp_page" value="probate-administration">
-
-        <button class="btn btn-gold" type="submit">Request My Free Case Review</button>
-        <p class="form-error" id="form-error">Please select your situation and fill in your name and phone number.</p>
-        <p class="fineprint">Free and confidential. Your information is reviewed by the firm —
-          never sold or shared.</p>
-      </form>
-
-      <div class="thanks" id="thanks-msg">
-        <strong>Thank you — your request is in.</strong> <span id="thanks-detail">The firm will
-        reach out shortly.</span> If the matter is urgent, call
-        <a href="tel:+19547384883" class="js-call">(954) 738-4883</a>.
+  <form id="lead-form" method="post" action="#" novalidate>
+    <fieldset class="wiz-step" data-step="1">
+      <legend>Which best describes your situation?</legend>
+      <div class="opts">
+        <button type="button" class="opt" data-q="situation" data-v="open-probate">A family member passed away — we need to open probate</button>
+        <button type="button" class="opt" data-q="situation" data-v="personal-rep">I'm the personal representative / executor and need help</button>
+        <button type="button" class="opt" data-q="situation" data-v="dispute">There's a dispute over the will, the estate, or a trustee</button>
+        <button type="button" class="opt" data-q="situation" data-v="beneficiary">I'm an heir or beneficiary with questions or concerns</button>
+        <button type="button" class="opt" data-q="situation" data-v="trust-admin">Trust administration after a death</button>
+        <button type="button" class="opt" data-q="situation" data-v="planning">I'd like a will or trust prepared (planning ahead)</button>
       </div>
-    </div>
+    </fieldset>
+
+    <fieldset class="wiz-step" data-step="2" hidden>
+      <legend>Does the estate include a home, condo, or land in Florida?</legend>
+      <div class="opts">
+        <button type="button" class="opt" data-q="real_estate" data-v="yes">Yes — there's Florida real estate</button>
+        <button type="button" class="opt" data-q="real_estate" data-v="no">No real estate</button>
+        <button type="button" class="opt" data-q="real_estate" data-v="not-sure">I'm not sure yet</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="wiz-step" data-step="3" hidden>
+      <legend id="contact-legend">Last step — where should we send your case review?</legend>
+
+      <div class="note" id="planning-note">
+        <strong>Happy to help with that too.</strong> Planning ahead is exactly what Rachel
+        recommends to every family she meets in probate court — leave your details and the
+        firm will reach out about wills, trusts, and guardianship arrangements. Or learn more
+        on our <a href="estate-planning.html">Planning Ahead</a> page.
+      </div>
+
+      <label for="name">Your name <span class="req">*</span></label>
+      <input id="name" name="name" type="text" autocomplete="name" required>
+
+      <label for="phone">Phone <span class="req">*</span></label>
+      <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" inputmode="email" autocomplete="email">
+
+      <div class="hp" aria-hidden="true">
+        <label for="company">Company</label>
+        <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button class="btn btn-gold" type="submit" id="wiz-submit">Request My Free Case Review</button>
+      <p class="form-error" id="form-error">Please fill in your name and phone number.</p>
+    </fieldset>
+
+    <button type="button" class="wiz-back" id="wiz-back" hidden>&larr; Back</button>
+  </form>
+
+  <div class="thanks" id="thanks-msg">
+    <strong>Thank you — your request is in.</strong> <span id="thanks-detail">The firm will
+    reach out shortly.</span> If the matter is urgent, call
+    <a href="tel:+19547384883" class="js-call">(954) 738-4883</a>.
   </div>
-</section>
+
+  <p class="fineprint">Free and confidential. Your information is reviewed by the firm —
+    never sold or shared.</p>
+</div>
 
 
 <div class="proof">
@@ -646,21 +753,65 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }).then(function(r){ if (r.ok) done(); else fail(); }).catch(fail);
   }
 
-  /* ---------- main case-review form ---------- */
+  /* ---------- case-review wizard: one question at a time ---------- */
   var form = document.getElementById("lead-form");
   if (form){
-    var situation = document.getElementById("situation");
-    var planNote  = document.getElementById("planning-note");
-    var thanks    = document.getElementById("thanks-msg");
-    var detail    = document.getElementById("thanks-detail");
-    var errBox    = document.getElementById("form-error");
+    var answers  = {};
+    var steps    = form.querySelectorAll(".wiz-step");
+    var fill     = document.getElementById("wiz-fill");
+    var label    = document.getElementById("wiz-label");
+    var backBtn  = document.getElementById("wiz-back");
+    var planNote = document.getElementById("planning-note");
+    var legend3  = document.getElementById("contact-legend");
+    var submitBtn = document.getElementById("wiz-submit");
+    var defaultSubmit = submitBtn.textContent;
+    var thanks   = document.getElementById("thanks-msg");
+    var detail   = document.getElementById("thanks-detail");
+    var errBox   = document.getElementById("form-error");
+    var current  = 1, started = false;
 
     // Planning visitors are welcomed, not turned away — their lead is simply
-    // tagged separately so it never counts as a probate ad conversion.
-    situation.addEventListener("change", function(){
-      var planning = situation.value === "planning";
-      planNote.style.display = planning ? "block" : "none";
-      if (planning) track("lp_planning_interest");
+    // tagged separately so it never counts as a probate ad conversion. They
+    // skip the estate question (there's no estate) and go straight to contact.
+    function isPlanning(){ return answers.situation === "planning"; }
+    function total(){ return isPlanning() ? 2 : 3; }
+    function shown(step){ return (isPlanning() && step === 3) ? 2 : step; }
+
+    function show(step){
+      current = step;
+      for (var i = 0; i < steps.length; i++){
+        steps[i].hidden = (parseInt(steps[i].getAttribute("data-step"), 10) !== step);
+      }
+      backBtn.hidden = (step === 1);
+      label.textContent = "Question " + shown(step) + " of " + total();
+      fill.style.width = Math.round(100 * shown(step) / total()) + "%";
+      planNote.style.display = (step === 3 && isPlanning()) ? "block" : "none";
+      if (step === 3){
+        legend3.textContent = isPlanning()
+          ? "Where should the firm reach you about planning?"
+          : "Last step — where should we send your case review?";
+        submitBtn.textContent = isPlanning()
+          ? "Request a Planning Conversation" : defaultSubmit;
+      }
+    }
+
+    form.addEventListener("click", function(e){
+      var opt = e.target.closest(".opt");
+      if (!opt) return;
+      answers[opt.getAttribute("data-q")] = opt.getAttribute("data-v");
+      if (!started){ started = true; track("lp_form_start"); }
+      if (opt.getAttribute("data-q") === "situation"){
+        if (isPlanning()){ track("lp_planning_interest"); show(3); }
+        else show(2);
+      } else {
+        show(3);
+      }
+    });
+
+    backBtn.addEventListener("click", function(){
+      errBox.style.display = "none";
+      if (current === 3) show(isPlanning() ? 1 : 2);
+      else show(1);
     });
 
     form.addEventListener("submit", function(e){
@@ -670,36 +821,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       var name  = document.getElementById("name").value.trim();
       var phone = document.getElementById("phone").value.trim();
-      if (!situation.value || !name || !phone){
+      if (!answers.situation || !name || !phone){
         errBox.style.display = "block";
         return;
       }
 
-      var planning = situation.value === "planning";
+      var planning = isPlanning();
       var data = {
-        situation: situation.value,
+        situation: answers.situation,
+        real_estate: answers.real_estate || "",
         lead_type: planning ? "planning" : "probate",
         name: name,
         phone: phone,
         email: document.getElementById("email").value.trim(),
-        message: document.getElementById("message").value.trim(),
         lp_page: "probate-administration",
         lp_kw: window.__lp_kw || ""
       };
 
       send(data, function(){
         form.style.display = "none";
+        label.style.display = "none";
+        fill.style.width = "100%";
         detail.textContent = planning
           ? "The firm will reach out about wills, trusts, and planning ahead."
           : "The firm will review the estate details and reach out shortly.";
         thanks.style.display = "block";
-        track(planning ? "lp_planning_submit" : "lp_form_submit", {lead_type: data.situation});
-        thanks.scrollIntoView({behavior:"smooth", block:"center"});
+        track(planning ? "lp_planning_submit" : "lp_form_submit",
+              {lead_type: data.situation, real_estate: data.real_estate});
       }, function(){
         errBox.textContent = "Something went wrong sending your request. Please call us at (954) 738-4883.";
         errBox.style.display = "block";
       });
     });
+
+    show(1);
   }
 
   /* ---------- planning page mini form ---------- */
