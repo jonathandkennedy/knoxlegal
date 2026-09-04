@@ -1,19 +1,27 @@
 # Keyword & campaign structure plan — probate campaigns
 
-## Ad group → landing page mapping (final URLs)
+## Ad group → landing page mapping (paste-ready final URLs)
 
 Every ad group points at the hub page that matches its intent — never the
-generic homepage:
+generic homepage. Live URLs (browse them all from the hub home's nav,
+situation cards, and "Where we serve" section):
 
-| Traffic | Final URL (on the hub) |
+| Traffic | Final URL (paste into Google Ads) |
 |---|---|
-| Search - Probate - Miami Beach | `miami-beach-probate-lawyer.html` |
-| Search - Probate - Pompano Beach | `pompano-beach-probate-lawyer.html` |
-| Estate dispute / will contest terms (growth, below) | `probate-litigation.html` |
-| Beneficiary / heir-rights terms (growth, below) | `beneficiary-representation.html` |
-| Out-of-state / ancillary terms (growth, below) | `out-of-state-probate.html` |
-| Trust administration terms | `trust-administration.html` |
-| Brand searches ("knox law probate") | `index.html` |
+| Search - Probate - Miami Beach | `https://knoxlegal.vercel.app/miami-beach-probate-lawyer` |
+| Search - Probate - Pompano Beach | `https://knoxlegal.vercel.app/pompano-beach-probate-lawyer` |
+| Estate dispute / will contest terms (growth, below) | `https://knoxlegal.vercel.app/probate-litigation` |
+| Beneficiary / heir-rights terms (growth, below) | `https://knoxlegal.vercel.app/beneficiary-representation` |
+| Out-of-state / ancillary terms (growth, below) | `https://knoxlegal.vercel.app/out-of-state-probate` |
+| Trust administration terms | `https://knoxlegal.vercel.app/trust-administration` |
+| General probate administration terms | `https://knoxlegal.vercel.app/probate-administration` |
+| Brand searches ("knox law probate") | `https://knoxlegal.vercel.app/` |
+
+Don't add `?kw=…` to these — the campaign-level **Final URL suffix**
+(`kw={keyword:probate}`, next section) appends the keyword automatically.
+
+When `results.knoxlegal.com` is added as the custom domain in Vercel, swap
+the domain in these URLs; the paths stay the same.
 
 
 ## Restructure (one-time, ~20 minutes)
