@@ -9,6 +9,7 @@ URL at the page that matches its intent.
 """
 
 import base64
+import json
 from pathlib import Path
 
 HERE = Path(__file__).parent
@@ -60,7 +61,83 @@ DEFAULTS = {
     "FORM_BUTTON": "Request My Free Case Review",
     "ON_INDEX": "", "ON_RESULTS": "", "ON_ADMIN": "", "ON_LIT": "",
     "ON_BEN": "", "ON_OOS": "", "ON_TRUST": "", "ON_PLAN": "",
+    "DKI_JSON": "null",
 }
+
+
+def city_dki(city, county):
+    """Whitelisted headline variants for a city page, keyed by substrings of
+    the bidded keyword (first match wins). Ads pass the keyword via the
+    Final URL suffix kw={keyword:probate} — see google-ads/keywords.md."""
+    return json.dumps({
+        "rules": [
+            ["personal representative", "prep"],
+            ["executor", "prep"],
+            ["letters of administration", "letters"],
+            ["summary administration", "summary"],
+            ["formal administration", "formal"],
+            ["estate administration", "estate_admin"],
+            ["without a will", "no_will"],
+            ["no will", "no_will"],
+            ["attorney", "attorney"],
+        ],
+        "variants": {
+            "attorney": {"h1": f"{city} Probate Attorney"},
+            "prep": {
+                "h1": f"{city} Probate — Help for Personal Representatives",
+                "lead": ("Named personal representative or executor? We handle "
+                         "the filings, the deadlines, and the court — you make "
+                         "the decisions that matter."),
+            },
+            "letters": {
+                "h1": f"Letters of Administration in {county}",
+                "lead": ("The court document banks and title companies ask "
+                         "for. Getting it issued is one of the first things we "
+                         "do when we open the estate."),
+            },
+            "summary": {"h1": f"Summary Administration in {county}"},
+            "formal": {"h1": f"Formal Administration in {county}"},
+            "estate_admin": {"h1": f"{city} Estate Administration Lawyer"},
+            "no_will": {
+                "h1": f"No Will? {city} Probate, Handled.",
+                "lead": ("Florida's intestacy law decides who inherits — the "
+                         "estate still goes through probate, and we handle "
+                         "every step for the family."),
+            },
+        },
+    })
+
+
+LITIGATION_DKI = json.dumps({
+    "rules": [
+        ["contest", "contest"],
+        ["undue influence", "undue"],
+        ["remove", "remove_exec"],
+        ["inheritance", "inheritance"],
+        ["trust litigation", "trust_lit"],
+    ],
+    "variants": {
+        "contest": {"h1": "Contesting a Will in Florida Is a Race Against the Clock."},
+        "undue": {"h1": "Undue Influence Claims, Investigated and Proven."},
+        "remove_exec": {"h1": "Removing an Executor Who Shouldn't Be in Charge."},
+        "inheritance": {"h1": "Your Inheritance Is Worth Defending."},
+        "trust_lit": {"h1": "When the Fight Is Over a Trust, Not a Will."},
+    },
+})
+
+OOS_DKI = json.dumps({
+    "rules": [
+        ["ancillary", "ancillary"],
+        ["out of state", "oos"],
+        ["non resident", "oos"],
+        ["inherited", "inherited"],
+    ],
+    "variants": {
+        "ancillary": {"h1": "Florida Ancillary Probate, Handled Remotely."},
+        "oos": {"h1": "Florida Probate for Out-of-State Families."},
+        "inherited": {"h1": "Inherited Florida Property? We Settle It From Here."},
+    },
+})
 
 PAGES = [
     {
@@ -115,6 +192,7 @@ PAGES = [
             "assessment now."
         ),
         "ON_LIT": ' class="on"',
+        "DKI_JSON": LITIGATION_DKI,
         "CALL_NOTE": "Estate dispute matters",
         "STICKY_FORM_LABEL": "Case assessment",
         "FORM_TITLE": "Request a Confidential Case Assessment",
@@ -163,6 +241,7 @@ PAGES = [
             "Florida."
         ),
         "ON_OOS": ' class="on"',
+        "DKI_JSON": OOS_DKI,
         "CALL_NOTE": "For probate after a death",
         "FORM_SUB": (
             "Tell us about the Florida property or accounts and where the "
@@ -266,6 +345,7 @@ for city in CITIES:
             f"e.g., My father passed in March. He owned a condo in "
             f"{city['CITY']} and had accounts at two banks. There is a will."
         ),
+        "DKI_JSON": city_dki(city["CITY"], city["COUNTY"]),
         "CITY": city["CITY"],
         "COUNTY": city["COUNTY"],
         "COURT_LINE": city["COURT_LINE"],

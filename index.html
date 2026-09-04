@@ -652,8 +652,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   window.dataLayer = window.dataLayer || [];
   function track(ev, extra){
-    window.dataLayer.push(Object.assign({event: ev, lp_page: "hub-home"}, extra || {}));
+    var payload = Object.assign({event: ev, lp_page: "hub-home"}, extra || {});
+    if (window.__lp_kw) payload.lp_kw = window.__lp_kw;
+    window.dataLayer.push(payload);
   }
+
+  /* ---------------------------------------------------------------
+     Whitelisted dynamic keyword insertion.
+     Ads append the bidded keyword via a Final URL suffix
+     (kw={keyword:probate} — see google-ads/keywords.md). The page
+     matches it against DKI.rules (first match wins) and swaps the
+     hero headline/lead to a PRE-WRITTEN variant. Unrecognized
+     keywords change nothing, and raw URL text is never rendered —
+     so junk queries can't put junk on the page.
+  ----------------------------------------------------------------*/
+  var DKI = null;
+  (function(){
+    try{
+      var kw = new URLSearchParams(location.search).get("kw");
+      if (!kw || !DKI || !DKI.rules) return;
+      kw = decodeURIComponent(kw).replace(/\+/g, " ").toLowerCase();
+      window.__lp_kw = kw.slice(0, 80);
+      var variant = null;
+      for (var i = 0; i < DKI.rules.length; i++){
+        if (kw.indexOf(DKI.rules[i][0]) !== -1){
+          variant = DKI.variants[DKI.rules[i][1]];
+          break;
+        }
+      }
+      if (!variant) return;
+      var h1 = document.querySelector(".hero h1");
+      if (h1 && variant.h1) h1.textContent = variant.h1;
+      var lead = document.querySelector(".hero .lead");
+      if (lead && variant.lead) lead.textContent = variant.lead;
+      track("lp_dki_applied", {dki_variant: variant.h1});
+    }catch(e){}
+  })();
 
   document.querySelectorAll(".js-call").forEach(function(a){
     a.addEventListener("click", function(){ track("lp_call_click"); });
@@ -707,7 +741,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         phone: phone,
         email: document.getElementById("email").value.trim(),
         message: document.getElementById("message").value.trim(),
-        lp_page: "hub-home"
+        lp_page: "hub-home",
+        lp_kw: window.__lp_kw || ""
       };
 
       send(data, function(){
