@@ -6,10 +6,17 @@ Each entry becomes pages/<slug>-probate-lawyer.html.
 Point each Google Ads campaign's final URL at its own city page.
 """
 
+import base64
 from pathlib import Path
 
 PHONE_DISPLAY = "(954) 738-4883"
 PHONE_TEL = "+19547384883"
+
+# Firm logo (white-text variant for the navy header/footer), embedded as a
+# data URI so each page stays one self-contained file. The full-resolution
+# original lives at assets/knox-legal-logo.png for use elsewhere (Elementor,
+# print, etc.); the -embed version is downscaled + quantized (~10 KB).
+LOGO_EMBED = Path(__file__).parent / "assets" / "knox-legal-logo-embed.png"
 
 CITIES = [
     {
@@ -40,10 +47,13 @@ CITIES = [
 
 HERE = Path(__file__).parent
 template = (HERE / "_template-city-probate.html").read_text(encoding="utf-8")
+logo_uri = "data:image/png;base64," + base64.b64encode(LOGO_EMBED.read_bytes()).decode()
 
 for city in CITIES:
     html = template
-    tokens = dict(city, PHONE_DISPLAY=PHONE_DISPLAY, PHONE_TEL=PHONE_TEL)
+    tokens = dict(
+        city, PHONE_DISPLAY=PHONE_DISPLAY, PHONE_TEL=PHONE_TEL, LOGO_URI=logo_uri
+    )
     for key, value in tokens.items():
         html = html.replace("{{%s}}" % key, value)
 

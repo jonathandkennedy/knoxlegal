@@ -1,4 +1,4 @@
-# Knox Legal — probate PPC funnel rebuild
+# Knox Law — probate PPC funnel rebuild
 
 Rebuild of the paid-search funnel for the probate campaigns. The problem
 being solved: the campaigns buy expensive clicks (up to ~$106 CPC) but the
@@ -18,6 +18,8 @@ click, after the click, and at hello.**
 pages/
   _template-city-probate.html    Master landing page template ({{TOKEN}}s)
   build.py                       Stamps city pages from the template
+  assets/knox-legal-logo.png     Firm logo, full resolution (white-text variant)
+  assets/knox-legal-logo-embed.png   Optimized ~10 KB version build.py embeds
   miami-beach-probate-lawyer.html    Generated — ready to deploy
   pompano-beach-probate-lawyer.html  Generated — ready to deploy
 google-ads/
@@ -31,8 +33,9 @@ google-ads/
 
 ## The landing pages
 
-Mobile-first, self-contained single files (no external CSS/JS/fonts — they
-load instantly on cellular, which most of this traffic is). Each page:
+Mobile-first, self-contained single files (no external CSS/JS/fonts, and the
+Knox Law logo is embedded inline — each page is ~58 KB total and loads
+instantly on cellular, which most of this traffic is). Each page:
 
 - **Qualifies in the first screen:** H1 "Miami Beach Probate Lawyer" +
   "A loved one has passed away…" — no "protect your assets" language anywhere.

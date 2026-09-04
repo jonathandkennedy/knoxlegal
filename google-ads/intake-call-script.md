@@ -6,7 +6,7 @@ the "qualified call" conversions in `conversion-tracking.md`. Print this.
 
 ## The screen (first 10 seconds)
 
-> "Thank you for calling Knox Legal. So I get you to the right person —
+> "Thank you for calling Knox Law. So I get you to the right person —
 > are you calling about the **estate of someone who has passed away**, or
 > about **setting up a will or trust for yourself**?"
 
