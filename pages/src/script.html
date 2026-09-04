@@ -1,0 +1,114 @@
+<script>
+(function(){
+  "use strict";
+  /* ---------------------------------------------------------------
+     FORM_ENDPOINT: where leads are POSTed as JSON (Formspree).
+     Set to "" to QA the flow without sending anything.
+  ----------------------------------------------------------------*/
+  var FORM_ENDPOINT = "https://formspree.io/f/xgaezppb";
+
+  window.dataLayer = window.dataLayer || [];
+  function track(ev, extra){
+    window.dataLayer.push(Object.assign({event: ev, lp_page: "{{SLUG}}"}, extra || {}));
+  }
+
+  document.querySelectorAll(".js-call").forEach(function(a){
+    a.addEventListener("click", function(){ track("lp_call_click"); });
+  });
+
+  function send(data, done, fail){
+    if (!FORM_ENDPOINT){ done(); return; } // QA mode
+    data._subject = "Knox Law " + (data.lead_type === "planning" ? "planning" : "PROBATE")
+      + " lead — " + data.lp_page;
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: {"Content-Type": "application/json", "Accept": "application/json"},
+      body: JSON.stringify(data)
+    }).then(function(r){ if (r.ok) done(); else fail(); }).catch(fail);
+  }
+
+  /* ---------- main case-review form ---------- */
+  var form = document.getElementById("lead-form");
+  if (form){
+    var situation = document.getElementById("situation");
+    var planNote  = document.getElementById("planning-note");
+    var thanks    = document.getElementById("thanks-msg");
+    var detail    = document.getElementById("thanks-detail");
+    var errBox    = document.getElementById("form-error");
+
+    // Planning visitors are welcomed, not turned away — their lead is simply
+    // tagged separately so it never counts as a probate ad conversion.
+    situation.addEventListener("change", function(){
+      var planning = situation.value === "planning";
+      planNote.style.display = planning ? "block" : "none";
+      if (planning) track("lp_planning_interest");
+    });
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      errBox.style.display = "none";
+      if (form.company && form.company.value) return; // honeypot
+
+      var name  = document.getElementById("name").value.trim();
+      var phone = document.getElementById("phone").value.trim();
+      if (!situation.value || !name || !phone){
+        errBox.style.display = "block";
+        return;
+      }
+
+      var planning = situation.value === "planning";
+      var data = {
+        situation: situation.value,
+        lead_type: planning ? "planning" : "probate",
+        name: name,
+        phone: phone,
+        email: document.getElementById("email").value.trim(),
+        message: document.getElementById("message").value.trim(),
+        lp_page: "{{SLUG}}"
+      };
+
+      send(data, function(){
+        form.style.display = "none";
+        detail.textContent = planning
+          ? "The firm will reach out about wills, trusts, and planning ahead."
+          : "The firm will review the estate details and reach out shortly.";
+        thanks.style.display = "block";
+        track(planning ? "lp_planning_submit" : "lp_form_submit", {lead_type: data.situation});
+        thanks.scrollIntoView({behavior:"smooth", block:"center"});
+      }, function(){
+        errBox.textContent = "Something went wrong sending your request. Please call us at {{PHONE_DISPLAY}}.";
+        errBox.style.display = "block";
+      });
+    });
+  }
+
+  /* ---------- planning page mini form ---------- */
+  var pform = document.getElementById("planning-form");
+  if (pform){
+    pform.addEventListener("submit", function(e){
+      e.preventDefault();
+      var perr = document.getElementById("p-error");
+      perr.style.display = "none";
+      if (pform.company && pform.company.value) return;
+      var name  = document.getElementById("p-name").value.trim();
+      var phone = document.getElementById("p-phone").value.trim();
+      if (!name || !phone){ perr.style.display = "block"; return; }
+      var data = {
+        lead_type: "planning",
+        interest: document.getElementById("p-interest").value,
+        name: name, phone: phone,
+        email: document.getElementById("p-email").value.trim(),
+        lp_page: "{{SLUG}}"
+      };
+      send(data, function(){
+        pform.style.display = "none";
+        document.getElementById("p-thanks").style.display = "block";
+        track("lp_planning_submit", {interest: data.interest});
+      }, function(){
+        perr.textContent = "Something went wrong — please reach the firm at knoxlegal.com.";
+        perr.style.display = "block";
+      });
+    });
+  }
+})();
+</script>
