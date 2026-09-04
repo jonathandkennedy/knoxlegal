@@ -58,8 +58,8 @@ DEFAULTS = {
         "accounts at two banks. There is a will."
     ),
     "FORM_BUTTON": "Request My Free Case Review",
-    "ON_INDEX": "", "ON_ADMIN": "", "ON_LIT": "", "ON_BEN": "",
-    "ON_OOS": "", "ON_TRUST": "", "ON_PLAN": "",
+    "ON_INDEX": "", "ON_RESULTS": "", "ON_ADMIN": "", "ON_LIT": "",
+    "ON_BEN": "", "ON_OOS": "", "ON_TRUST": "", "ON_PLAN": "",
 }
 
 PAGES = [
@@ -73,6 +73,18 @@ PAGES = [
             "Florida — handled by Attorney Rachel Knox since 1997. Free case review."
         ),
         "ON_INDEX": ' class="on"',
+    },
+    {
+        "out": "case-results.html",
+        "body": "body-results.html",
+        "SLUG": "case-results",
+        "TITLE": "Results — Florida Estates Settled | Knox Law",
+        "META_DESC": (
+            "Estates administered, will contests resolved, assets recovered, "
+            "titles cleared — nearly three decades of Florida probate results "
+            "from Attorney Rachel Knox."
+        ),
+        "ON_RESULTS": ' class="on"',
     },
     {
         "out": "probate-administration.html",
@@ -268,6 +280,7 @@ partials = {
     "STATS": read("stats.html"),
     "REVIEWS": read("reviews.html"),
     "ATTORNEY": read("attorney.html"),
+    "RESULTS": read("results.html"),
 }
 header = read("header.html")
 footer = read("footer.html")
