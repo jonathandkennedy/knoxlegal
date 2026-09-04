@@ -1,0 +1,108 @@
+# Negative keywords — Knox Legal probate campaigns
+# Apply as a shared negative list to BOTH probate campaigns.
+# Quotes = phrase match negative. Brackets = exact match negative.
+# Lines starting with # are comments — don't paste them.
+#
+# ============ DO NOT ADD (read first) ============
+# Do NOT add the single word  will  (or broad-match  wills ) as a negative,
+# even though wrong calls are about wills. Negative keywords do not use
+# close variants, but a phrase negative "will" would block the single BEST
+# probate intent that exists:
+#   "father died without a will florida"
+#   "no will who inherits the house"
+#   "does a will have to go through probate"
+# Those are grieving families who need probate NOW. Block drafting intent
+# with the specific phrases below instead, and police the rest through the
+# weekly search-terms review (see keywords.md).
+# =================================================
+
+# ---- Tier 1: estate planning / drafting (add today) ----
+"estate planning"
+"estate plan"
+"make a will"
+"write a will"
+"create a will"
+"draft a will"
+"will template"
+"will kit"
+"online will"
+"cheap will"
+"simple will"
+"living will"
+"living trust"
+"revocable trust"
+"irrevocable trust"
+"set up a trust"
+"create a trust"
+"make a trust"
+"wills and trusts"
+"will and trust"
+"power of attorney"
+"poa"
+"healthcare surrogate"
+"health care surrogate"
+"advance directive"
+"notary"
+"avoid probate"
+"avoiding probate"
+"how to avoid probate"
+
+# ---- Tier 1: DIY / pro se (they won't hire) ----
+"probate forms"
+"probate form"
+"without a lawyer"
+"without an attorney"
+"do it yourself"
+"diy"
+"pro se"
+"file probate myself"
+"free forms"
+"template"
+"sample"
+"pdf"
+
+# ---- Tier 1: jobs, education, research ----
+"jobs"
+"salary"
+"paralegal"
+"internship"
+"course"
+"training"
+"certification"
+"law school"
+"definition"
+"meaning"
+
+# ---- Tier 1: real-estate lead-gen & investors (they want leads, not a lawyer) ----
+"probate leads"
+"leads"
+"probate listings"
+"listings"
+"wholesaling"
+"investor"
+"investors"
+"realtor"
+"real estate agent"
+
+# ---- Tier 1: no-fee seekers & records lookups ----
+"free lawyer"
+"free attorney"
+"pro bono"
+"legal aid"
+"unclaimed money"
+"unclaimed property"
+"court records"
+"case search"
+"case lookup"
+"docket"
+
+# ---- Tier 2: WATCH LIST — add only if search terms confirm waste ----
+# "wills"                  (plural leans drafting, but verify first)
+# "last will and testament" (usually drafting/downloads; occasionally a family
+#                            that just found one — check search terms)
+# "probate sale"           (often investors, but families selling the estate
+#                            house search this too)
+# "guardianship"           (different practice area — negative it unless the
+#                            firm wants those cases from this budget)
+# "trust"                  (too broad — would block "trust administration
+#                            after death"; rely on the specific phrases above)
