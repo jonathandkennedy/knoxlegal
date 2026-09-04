@@ -528,13 +528,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (function(){
   "use strict";
   /* ---------------------------------------------------------------
-     FORM_ENDPOINT: where leads are POSTed as JSON.
-     Point at the firm's form handler (WPForms/Gravity webhook,
-     Formspree, Basin, Zapier -> Clio Grow / Lawmatics, etc.).
-     Leave empty while testing: the page behaves as if the send
-     succeeded so the flow can be QA'd.
+     FORM_ENDPOINT: where leads are POSTed as JSON (Formspree).
+     Set to "" to QA the flow without sending anything.
   ----------------------------------------------------------------*/
-  var FORM_ENDPOINT = "";
+  var FORM_ENDPOINT = "https://formspree.io/f/xgaezppb";
 
   window.dataLayer = window.dataLayer || [];
   function track(ev, extra){
@@ -547,10 +544,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function send(data, done, fail){
     if (!FORM_ENDPOINT){ done(); return; } // QA mode
+    data._subject = "Knox Law " + (data.lead_type === "planning" ? "planning" : "PROBATE")
+      + " lead — " + data.lp_page;
     fetch(FORM_ENDPOINT, {
-      method:"POST", headers:{"Content-Type":"application/json"},
+      method: "POST",
+      headers: {"Content-Type": "application/json", "Accept": "application/json"},
       body: JSON.stringify(data)
-    }).then(done).catch(fail);
+    }).then(function(r){ if (r.ok) done(); else fail(); }).catch(fail);
   }
 
   /* ---------- main case-review form ---------- */

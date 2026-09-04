@@ -95,7 +95,7 @@ entry to `CITIES` in `pages/build.py` and run `python3 pages/build.py`.
 | `[★ 5.0]` / review-count stat | `pages/src/stats.html` |
 | Real Google reviews, quoted verbatim | `pages/src/reviews.html` |
 | `[FIRM STREET ADDRESS…]` (FL Bar ad rules want an office location) | `pages/src/footer.html` |
-| `FORM_ENDPOINT` — where forms POST (WPForms webhook, Formspree, Zapier → Clio Grow/Lawmatics…) | `pages/src/script.html` |
+| ~~`FORM_ENDPOINT`~~ **Done** — forms POST to Formspree `f/xgaezppb`; subjects distinguish PROBATE vs planning leads | `pages/src/script.html` (set to `""` to QA without sending) |
 | ~~GTM container snippet~~ **Done** — `GTM-W38VB5SN` is embedded in every page (GA4 `G-RTZXGQX46B`, Ads `AW-16979216728`) | wire the triggers per `google-ads/conversion-tracking.md` |
 | Fee copy — "fees paid from the estate", "fees from the estate or recovery" | page bodies + `rsa-copy.md`; **attorney must confirm** |
 
