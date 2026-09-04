@@ -39,17 +39,35 @@ optimizing toward them, and paying up to ~$106 a click to do it.
   This one change stops the wrong-lead feedback loop immediately, before
   anything else launches.
 
-## GTM wiring for the new landing pages
+## GTM wiring for the hub (real IDs)
 
-The pages already push these events — just add the GTM container snippet
-(marked spot in the `<head>`) and create:
+The stack, confirmed live in the firm's Tag Manager account:
+
+| What | ID |
+|---|---|
+| GTM container (knoxlegal.com) | `GTM-W38VB5SN` — **already embedded in every hub page** |
+| GA4 property | `G-RTZXGQX46B` |
+| Google Ads account (conversions) | `AW-16979216728` |
+| Google tag aliases | `GT-P8Z43H9R`, `GT-TNH9N58S` (same tag — no action needed) |
+
+⚠️ **Audit the two existing tags firing to `AW-16979216728` first.** The
+container currently sends two destinations into that Ads account — one of
+them is almost certainly the conversion action that's been counting
+wills/trusts calls as wins. Identify which conversion actions they feed,
+and demote the raw-call one to Secondary before launching anything else.
+
+The hub pages already push the events — in GTM, create Custom Event
+triggers matching each event name, then:
 
 | dataLayer event          | GTM trigger (Custom Event) | Send to                                   |
 |--------------------------|----------------------------|-------------------------------------------|
-| `lp_form_submit`         | `lp_form_submit`           | Google Ads conversion **(Primary)** + GA4 |
-| `lp_call_click`          | `lp_call_click`            | Google Ads conversion (Secondary) + GA4   |
+| `lp_form_submit`         | `lp_form_submit`           | New Ads conversion "Probate case review — form" under `AW-16979216728` **(Primary)** + GA4 `G-RTZXGQX46B` |
+| `lp_call_click`          | `lp_call_click`            | New Ads conversion "LP call click" (Secondary) + GA4 |
 | `lp_planning_submit`     | `lp_planning_submit`       | GA4 + (optional) Secondary Ads conversion — a real lead for the firm, **never Primary** |
 | `lp_planning_interest`   | `lp_planning_interest`     | GA4 only — someone picked "planning" in the dropdown |
+
+Also make sure a **Conversion Linker** tag exists in the container (fires on
+all pages) so click IDs survive to the conversion tags.
 
 Each event carries `lp_page`, and probate submits carry `lead_type`
 (open-probate / personal-rep / dispute / beneficiary / trust-admin), so
