@@ -615,8 +615,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   window.dataLayer = window.dataLayer || [];
   function track(ev, extra){
-    window.dataLayer.push(Object.assign({event: ev, lp_page: "miami-beach-probate-lawyer"}, extra || {}));
+    var payload = Object.assign({event: ev, lp_page: "miami-beach-probate-lawyer"}, extra || {});
+    if (window.__lp_kw) payload.lp_kw = window.__lp_kw;
+    window.dataLayer.push(payload);
   }
+
+  /* ---------------------------------------------------------------
+     Whitelisted dynamic keyword insertion.
+     Ads append the bidded keyword via a Final URL suffix
+     (kw={keyword:probate} — see google-ads/keywords.md). The page
+     matches it against DKI.rules (first match wins) and swaps the
+     hero headline/lead to a PRE-WRITTEN variant. Unrecognized
+     keywords change nothing, and raw URL text is never rendered —
+     so junk queries can't put junk on the page.
+  ----------------------------------------------------------------*/
+  var DKI = {"rules": [["personal representative", "prep"], ["executor", "prep"], ["letters of administration", "letters"], ["summary administration", "summary"], ["formal administration", "formal"], ["estate administration", "estate_admin"], ["without a will", "no_will"], ["no will", "no_will"], ["attorney", "attorney"]], "variants": {"attorney": {"h1": "Miami Beach Probate Attorney"}, "prep": {"h1": "Miami Beach Probate \u2014 Help for Personal Representatives", "lead": "Named personal representative or executor? We handle the filings, the deadlines, and the court \u2014 you make the decisions that matter."}, "letters": {"h1": "Letters of Administration in Miami-Dade County", "lead": "The court document banks and title companies ask for. Getting it issued is one of the first things we do when we open the estate."}, "summary": {"h1": "Summary Administration in Miami-Dade County"}, "formal": {"h1": "Formal Administration in Miami-Dade County"}, "estate_admin": {"h1": "Miami Beach Estate Administration Lawyer"}, "no_will": {"h1": "No Will? Miami Beach Probate, Handled.", "lead": "Florida's intestacy law decides who inherits \u2014 the estate still goes through probate, and we handle every step for the family."}}};
+  (function(){
+    try{
+      var kw = new URLSearchParams(location.search).get("kw");
+      if (!kw || !DKI || !DKI.rules) return;
+      kw = decodeURIComponent(kw).replace(/\+/g, " ").toLowerCase();
+      window.__lp_kw = kw.slice(0, 80);
+      var variant = null;
+      for (var i = 0; i < DKI.rules.length; i++){
+        if (kw.indexOf(DKI.rules[i][0]) !== -1){
+          variant = DKI.variants[DKI.rules[i][1]];
+          break;
+        }
+      }
+      if (!variant) return;
+      var h1 = document.querySelector(".hero h1");
+      if (h1 && variant.h1) h1.textContent = variant.h1;
+      var lead = document.querySelector(".hero .lead");
+      if (lead && variant.lead) lead.textContent = variant.lead;
+      track("lp_dki_applied", {dki_variant: variant.h1});
+    }catch(e){}
+  })();
 
   document.querySelectorAll(".js-call").forEach(function(a){
     a.addEventListener("click", function(){ track("lp_call_click"); });
@@ -670,7 +704,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         phone: phone,
         email: document.getElementById("email").value.trim(),
         message: document.getElementById("message").value.trim(),
-        lp_page: "miami-beach-probate-lawyer"
+        lp_page: "miami-beach-probate-lawyer",
+        lp_kw: window.__lp_kw || ""
       };
 
       send(data, function(){

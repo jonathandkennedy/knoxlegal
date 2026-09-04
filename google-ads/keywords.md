@@ -51,6 +51,36 @@ landing on the Miami Beach URL — that costs Quality Score and trust.
   (see `conversion-tracking.md`), run **Maximize Clicks with a CPC cap**
   (start ~$40–50 for this niche in South FL) or manual CPC.
 
+## Dynamic keyword insertion — on the PAGE, not in the ads
+
+The hub pages adapt their hero headline to the keyword that was clicked
+(goldbergloren-style). Set it up once:
+
+**Google Ads → each probate campaign → Settings → Additional settings →
+Final URL suffix:**
+
+```
+kw={keyword:probate}
+```
+
+`{keyword}` inserts the **bidded keyword** (not the raw search query) into
+the landing page URL, e.g. `/miami-beach-probate-lawyer?kw=executor%20attorney`.
+The page matches it against a **whitelist** and swaps to a pre-written
+headline — "Miami Beach Probate Attorney", "Help for Personal
+Representatives", "Letters of Administration in Miami-Dade County",
+"No Will? Miami Beach Probate, Handled." — on the city, litigation, and
+out-of-state pages. An unrecognized keyword changes nothing, and URL text
+is never rendered onto the page, so junk can't leak in.
+
+This is why page-side insertion is safe while ad-side `{KeyWord:}` stayed
+removed: the ad version echoed whatever the searcher typed (including
+"living trust attorney"); the page version can only ever show our own
+probate-qualified copy.
+
+Bonus: the keyword rides along on every conversion — `lp_kw` appears in
+the Formspree lead email and in the dataLayer events, so you can see which
+keywords produce real probate cases, not just clicks.
+
 ## Keywords — Probate — Core (phrase + exact)
 
 ```
